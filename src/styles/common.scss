@@ -80,6 +80,9 @@ body {
   
   .scrollbar-wrapper {
     overflow-x: hidden !important;
+    .el-scrollbar__wrap{
+      overflow-x: hidden !important;
+    }
   }
   
   .el-scrollbar {

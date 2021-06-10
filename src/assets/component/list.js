@@ -1,46 +1,49 @@
+import bar from "./config/bar";
+
 export default [
   {
     icon: "echarts",
     children: [
       {
-        id: "barChart",
+        component: "barChart",
         title: "柱状图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/bar.png"),
+        config: bar,
       },
       {
-        id: "lineChart",
+        component: "lineChart",
         title: "折线图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/line.png"),
       },
       {
-        id: "pieChart",
+        component: "pieChart",
         title: "饼图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/pie.png"),
       },
       {
-        id: "liquidChart",
+        component: "liquidChart",
         title: "水球图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/liquid.png"),
       },
       {
-        id: "gaugeChart",
+        component: "gaugeChart",
         title: "仪表盘",
-        img: require("../background/a13.jpg"),
+        img: require("./img/gauge.png"),
       },
       {
-        id: "wordChart",
+        component: "wordChart",
         title: "词云图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/word.png"),
       },
       {
-        id: "radarChart",
+        component: "radarChart",
         title: "雷达图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/radar.png"),
       },
       {
-        id: "treeChart",
+        component: "treeChart",
         title: "矩形树图",
-        img: require("../background/a13.jpg"),
+        img: require("./img/tree.png"),
       },
     ],
   },

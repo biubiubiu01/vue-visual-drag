@@ -45,6 +45,7 @@
             <slot :name="item.slotName" :data="scope.row"></slot>
           </template>
         </el-table-column>
+
         <el-table-column
           :key="item.value"
           :align="item.align"
@@ -58,6 +59,15 @@
           :fixed="item.fixed"
           v-else
         >
+          <template scope="scope" v-if="editModel">
+            <el-input
+              size="small"
+              v-model="scope.row[item.value]"
+              v-show="scope.row.show"
+              placeholder="请输入内容"
+            ></el-input>
+            <span v-show="!scope.row.show">{{ scope.row[item.value] }}</span>
+          </template>
         </el-table-column>
       </template>
       <div slot="empty">
@@ -137,6 +147,10 @@ export default {
     },
     //是否显示多选框
     selectionShow: {
+      type: Boolean,
+      default: false,
+    },
+    editModel: {
       type: Boolean,
       default: false,
     },
