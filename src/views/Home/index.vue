@@ -7,7 +7,12 @@
       align="middle"
     >
       <el-tooltip effect="dark" content="预览" placement="bottom-start">
-        <svg-icon icon="preview" :size="18" class="svgSpace pointer white" />
+        <svg-icon
+          icon="preview"
+          :size="18"
+          class="svgSpace pointer white"
+          @click.native="previewShow = true"
+        />
       </el-tooltip>
 
       <el-tooltip effect="dark" content="清除" placement="bottom-start">
@@ -15,15 +20,25 @@
           icon="clear"
           :size="18"
           class="svgSpace pointer white"
-          @click.native="drawingList = []"
+          @click.native="handleClear"
         />
       </el-tooltip>
       <el-tooltip effect="dark" content="生成项目" placement="bottom-start">
-        <svg-icon icon="export" :size="18" class="svgSpace pointer white" />
+        <svg-icon
+          icon="export"
+          :size="18"
+          class="svgSpace pointer white"
+          @click.native="exportProject"
+        />
       </el-tooltip>
 
       <el-tooltip effect="dark" content="导出图片" placement="bottom-start">
-        <svg-icon icon="exportImg" :size="18" class="svgSpace pointer white" />
+        <svg-icon
+          icon="exportImg"
+          :size="18"
+          class="svgSpace pointer white"
+          @click.native="exportImg"
+        />
       </el-tooltip>
 
       <el-tooltip effect="dark" content="数据来源" placement="bottom-start">
@@ -76,12 +91,14 @@
       <div
         class="center flex-sub relative"
         :style="{ backgroundImage: 'url(' + background + ')' }"
+        ref="cutScreen"
       >
         <draggable
           group="componentDrag"
           animation="340"
           v-model="drawingList"
           ghostClass="ghost"
+          style="height: 100%"
         >
           <vue-drag-resize
             v-for="(item, index) in drawingList"
@@ -112,12 +129,14 @@
           </vue-drag-resize>
         </draggable>
       </div>
-      <right-setting
-        v-if="currentDel"
-        :config="currentConfig"
-        @changeSize="changeSize"
-      >
-      </right-setting>
+      <div class="right">
+        <right-setting
+          v-if="currentDel"
+          :config="currentConfig"
+          @changeSize="changeSize"
+        >
+        </right-setting>
+      </div>
     </div>
 
     <dialog-table
@@ -127,6 +146,16 @@
       v-if="currentDel"
     >
     </dialog-table>
+
+    <dialog-preview
+      :list="drawingList"
+      :background="background"
+      @close="previewShow = false"
+      :width="$refs.cutScreen.offsetWidth"
+      :height="$refs.cutScreen.offsetHeight"
+      v-if="previewShow"
+    >
+    </dialog-preview>
   </div>
 </template>
 
@@ -135,12 +164,37 @@ import componentList from "@/assets/component/list";
 import draggable from "vuedraggable";
 import vueDragResize from "vue-drag-resize";
 import { deepClone } from "@/utils/index.js";
-import { barChart } from "@/components/Charts";
+import {
+  barChart,
+  lineChart,
+  pieChart,
+  liquidChart,
+  gaugeChart,
+  wordChart,
+  radarChart,
+  treeChart,
+} from "@/components/Charts";
 import rightSetting from "./rightSetting.vue";
 import dialogTable from "./dialogTable";
+import dialogPreview from "./dialogPreview";
+import html2canvas from "html2canvas";
 export default {
   name: "Home",
-  components: { draggable, vueDragResize, barChart, rightSetting, dialogTable },
+  components: {
+    draggable,
+    vueDragResize,
+    barChart,
+    rightSetting,
+    dialogTable,
+    lineChart,
+    pieChart,
+    liquidChart,
+    gaugeChart,
+    wordChart,
+    radarChart,
+    treeChart,
+    dialogPreview,
+  },
   data() {
     return {
       currentIcon: "echarts",
@@ -154,6 +208,8 @@ export default {
       currentConfig: {},
       //数据来源dialog
       dialogTableShow: false,
+      //预览显示
+      previewShow: false,
     };
   },
   computed: {
@@ -171,12 +227,19 @@ export default {
       return [];
     },
   },
+
   methods: {
     //盒子移动到指定盒子
     handleEnd(e) {
       let { component, id, config } = this.currentMove;
-      config.left = e.originalEvent.offsetX;
-      config.top = e.originalEvent.offsetY;
+      const dom = this.$refs.cutScreen;
+      const height = dom.offsetHeight - 300;
+      const width = dom.offsetWidth - 300;
+      config.left =
+        e.originalEvent.offsetX > width ? width : e.originalEvent.offsetX;
+      config.top =
+        e.originalEvent.offsetY > height ? height : e.originalEvent.offsetY;
+
       this.drawingList.push({
         component,
         id,
@@ -205,6 +268,7 @@ export default {
       });
     },
 
+    //拖拽移动停止
     handleDragStop(e, val) {
       Object.assign(this.currentConfig, {
         left: e.left,
@@ -240,12 +304,42 @@ export default {
       });
     },
 
+    //打开dialog
     openDialog() {
       if (this.currentDel) {
+        if (this.currentConfig.series.type == "radar") {
+          this.$message.warning("该图形暂不可编辑数据源");
+          return;
+        }
         this.dialogTableShow = true;
       } else {
         this.$message.warning("请先选中一个图形!");
       }
+    },
+
+    //清除所有
+    handleClear() {
+      this.drawingList = [];
+      this.currentDel = "";
+      this.currentConfig = {};
+    },
+
+    //生成项目
+    exportProject() {
+      this.$message.info("功能开发中...");
+    },
+
+    //导出图片
+    exportImg() {
+      const boxDom = this.$refs.cutScreen;
+
+      html2canvas(boxDom).then((res) => {
+        var dataUrl = res.toDataURL("image/jpeg", 1.0);
+        var a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = `img_${new Date().getTime()}.png`;
+        a.click();
+      });
     },
   },
 };
@@ -268,8 +362,8 @@ export default {
   }
   .main-container {
     width: 100%;
-    height: calc(100% - 44px);
     position: relative;
+    height: calc(100% - 44px);
     .left {
       height: 100%;
       .left-list {
@@ -320,9 +414,9 @@ export default {
       }
     }
     .center {
-      background-position: 50%;
+      background-size: 100% 100%;
       background-repeat: no-repeat;
-      background-size: cover;
+      overflow: hidden;
 
       .drag-box {
         width: 100%;
@@ -336,6 +430,11 @@ export default {
       .ghost {
         opacity: 0;
       }
+    }
+    .right {
+      width: 340px;
+      height: 100%;
+      z-index: 150;
     }
   }
 }

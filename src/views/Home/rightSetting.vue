@@ -37,7 +37,11 @@
         ></el-input>
       </el-form-item>
       <el-collapse>
-        <el-collapse-item title="标题" name="title">
+        <el-collapse-item
+          title="标题"
+          name="title"
+          v-if="!['liquid'].includes(config.series.type)"
+        >
           <el-form-item label="显示标题：">
             <el-switch v-model="config.title.show"></el-switch>
           </el-form-item>
@@ -48,6 +52,7 @@
             <div class="flex align-center">
               <el-color-picker
                 v-model="config.title.textStyle.color"
+                show-alpha
                 size="mini"
               ></el-color-picker>
               <el-input
@@ -66,7 +71,11 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="网格" name="grid">
+        <el-collapse-item
+          title="网格"
+          name="grid"
+          v-if="['bar', 'line'].includes(config.series.type)"
+        >
           <el-form-item label="left：">
             <el-input v-model="config.grid.left" size="mini"></el-input>
           </el-form-item>
@@ -81,7 +90,15 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="图例" name="legend">
+        <el-collapse-item
+          title="图例"
+          name="legend"
+          v-if="
+            !['liquid', 'gauge', 'word', 'radar', 'tree'].includes(
+              config.series.type
+            )
+          "
+        >
           <el-form-item label="显示图例：">
             <el-switch v-model="config.legend.show"></el-switch>
           </el-form-item>
@@ -91,6 +108,7 @@
               <el-color-picker
                 v-model="config.legend.textStyle.color"
                 size="mini"
+                show-alpha
               ></el-color-picker>
               <el-input
                 v-model="config.legend.textStyle.fontSize"
@@ -147,6 +165,7 @@
           <el-form-item label="轴线样式：" v-if="config.xAxis.axisLine.show">
             <div class="flex align-center">
               <el-color-picker
+                show-alpha
                 v-model="config.xAxis.axisLine.lineStyle.color"
                 size="mini"
               ></el-color-picker>
@@ -165,6 +184,7 @@
               <el-color-picker
                 v-model="config.xAxis.axisTick.lineStyle.color"
                 size="mini"
+                show-alpha
               ></el-color-picker>
               <el-input
                 v-model="config.xAxis.axisTick.lineStyle.width"
@@ -179,6 +199,7 @@
           <el-form-item label="标签样式：" v-if="config.xAxis.axisLabel.show">
             <div class="flex align-center">
               <el-color-picker
+                show-alpha
                 v-model="config.xAxis.axisLabel.color"
                 size="mini"
               ></el-color-picker>
@@ -205,6 +226,7 @@
           <el-form-item label="分割样式：" v-if="config.xAxis.splitLine.show">
             <div class="flex align-center">
               <el-color-picker
+                show-alpha
                 v-model="config.xAxis.splitLine.lineStyle.color"
                 size="mini"
               ></el-color-picker>
@@ -229,6 +251,7 @@
           <el-form-item label="名称样式：" v-if="config.yAxis.name">
             <div class="flex align-center">
               <el-color-picker
+                show-alpha
                 v-model="config.yAxis.nameTextStyle.color"
                 size="mini"
               ></el-color-picker>
@@ -245,6 +268,7 @@
           <el-form-item label="轴线样式：" v-if="config.yAxis.axisLine.show">
             <div class="flex align-center">
               <el-color-picker
+                show-alpha
                 v-model="config.yAxis.axisLine.lineStyle.color"
                 size="mini"
               ></el-color-picker>
@@ -263,6 +287,7 @@
               <el-color-picker
                 v-model="config.yAxis.axisTick.lineStyle.color"
                 size="mini"
+                show-alpha
               ></el-color-picker>
               <el-input
                 v-model="config.yAxis.axisTick.lineStyle.width"
@@ -277,6 +302,7 @@
           <el-form-item label="标签样式：" v-if="config.yAxis.axisLabel.show">
             <div class="flex align-center">
               <el-color-picker
+                show-alpha
                 v-model="config.yAxis.axisLabel.color"
                 size="mini"
               ></el-color-picker>
@@ -296,6 +322,7 @@
               <el-color-picker
                 v-model="config.yAxis.splitLine.lineStyle.color"
                 size="mini"
+                show-alpha
               ></el-color-picker>
               <el-input
                 v-model="config.yAxis.splitLine.lineStyle.width"
@@ -328,8 +355,19 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="配置项" name="series">
-          <el-form-item label="柱子方向：">
+        <el-collapse-item
+          title="配置项"
+          name="series"
+          v-if="
+            !['liquid', 'gauge', 'word', 'radar', 'tree'].includes(
+              config.series.type
+            )
+          "
+        >
+          <el-form-item
+            label="方向："
+            v-if="['bar', 'line'].includes(config.series.type)"
+          >
             <el-select v-model="config.series.orient">
               <el-option
                 v-for="(item, index) in directionOption"
@@ -346,32 +384,174 @@
           <el-form-item label="柱子宽度：" v-if="config.series.type == 'bar'">
             <el-input v-model="config.series.barWidth" size="mini"></el-input>
           </el-form-item>
-          <el-form-item label="渐变颜色：">
+          <el-form-item label="线条宽度：" v-if="config.series.type == 'line'">
+            <el-input v-model="config.series.lineWidth" size="mini"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="渐变颜色："
+            v-if="['bar', 'line'].includes(config.series.type)"
+          >
             <el-switch v-model="config.series.gradual"></el-switch>
           </el-form-item>
-          <el-form-item label="颜色：">
+          <el-form-item
+            label="颜色："
+            v-if="['bar', 'line'].includes(config.series.type)"
+          >
             <div class="flex align-center" v-if="config.series.gradual">
               <el-color-picker
                 v-model="config.series.gradualColor[0]"
                 size="mini"
+                show-alpha
               ></el-color-picker>
               <span style="margin: 0 5px">-</span>
               <el-color-picker
+                show-alpha
                 v-model="config.series.gradualColor[1]"
                 size="mini"
               ></el-color-picker>
             </div>
             <el-color-picker
               v-else
+              show-alpha
               v-model="config.series.color"
               size="mini"
             ></el-color-picker>
+          </el-form-item>
+          <el-form-item label="显示填充：" v-if="config.series.type == 'line'">
+            <el-switch v-model="config.series.areaStyle.show"></el-switch>
+          </el-form-item>
+          <el-form-item
+            label="填充样式："
+            v-if="config.series.type == 'line' && config.series.areaStyle.show"
+          >
+            <div class="flex align-center">
+              <el-color-picker
+                v-model="config.series.areaStyle.gradualColor[0]"
+                size="mini"
+                show-alpha
+              ></el-color-picker>
+              <span style="margin: 0 5px">-</span>
+              <el-color-picker
+                v-model="config.series.areaStyle.gradualColor[1]"
+                size="mini"
+                show-alpha
+              ></el-color-picker>
+            </div>
           </el-form-item>
           <el-form-item label="柱子圆角：" v-if="config.series.type == 'bar'">
             <el-input
               v-model="config.series.barBorderRadius"
               size="mini"
             ></el-input>
+          </el-form-item>
+
+          <el-form-item label="是否实心：" v-if="config.series.type == 'pie'">
+            <el-switch v-model="config.series.solid"></el-switch>
+          </el-form-item>
+
+          <el-form-item label="半径：" v-if="config.series.type == 'pie'">
+            <div class="flex align-center" v-if="!config.series.solid">
+              <el-input
+                v-model="config.series.radius[0]"
+                size="mini"
+              ></el-input>
+              <el-input
+                v-model="config.series.radius[1]"
+                size="mini"
+              ></el-input>
+            </div>
+            <el-input
+              v-else
+              v-model="config.series.solidRadius"
+              size="mini"
+            ></el-input>
+          </el-form-item>
+
+          <el-form-item label="南丁格尔：" v-if="config.series.type == 'pie'">
+            <el-switch v-model="config.series.roseType"></el-switch>
+          </el-form-item>
+
+          <el-form-item label="显示label：">
+            <el-switch v-model="config.series.label.show"></el-switch>
+          </el-form-item>
+          <el-form-item label="label样式：" v-if="config.series.label.show">
+            <div class="flex align-center">
+              <el-color-picker
+                show-alpha
+                v-model="config.series.label.color"
+                size="mini"
+              ></el-color-picker>
+              <el-input
+                v-model="config.series.label.fontSize"
+                size="mini"
+                style="margin: 0 8px 0 12px"
+              ></el-input
+              >px
+            </div>
+          </el-form-item>
+          <el-form-item label="label位置：" v-if="config.series.label.show">
+            <el-select v-model="config.series.label.position">
+              <el-option
+                v-for="item in positionOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="引导线：" v-if="config.series.type == 'pie'">
+            <el-switch v-model="config.series.labelLine.show"></el-switch>
+          </el-form-item>
+          <el-form-item
+            label="线长度："
+            v-if="config.series.type == 'pie' && config.series.labelLine.show"
+          >
+            <div class="flex align-center">
+              <el-input
+                v-model="config.series.labelLine.length"
+                size="mini"
+              ></el-input>
+              <el-input
+                v-model="config.series.labelLine.length2"
+                size="mini"
+              ></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item
+            label="平滑显示："
+            v-if="['bar', 'line'].includes(config.series.type)"
+          >
+            <el-switch v-model="config.series.smooth"></el-switch>
+          </el-form-item>
+          <el-form-item label="显示图标：" v-if="config.series.type == 'line'">
+            <el-switch v-model="config.series.showSymbol"></el-switch>
+          </el-form-item>
+          <el-form-item
+            label="图标大小："
+            v-if="config.series.type == 'line' && config.series.showSymbol"
+          >
+            <el-input v-model="config.series.symbolSize" size="mini"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="图标颜色："
+            v-if="config.series.type == 'line' && config.series.showSymbol"
+          >
+            <el-color-picker
+              v-model="config.series.itemStyle.color"
+              size="mini"
+              show-alpha
+            ></el-color-picker>
+          </el-form-item>
+          <el-form-item
+            label="边框颜色："
+            v-if="config.series.type == 'line' && config.series.showSymbol"
+          >
+            <el-color-picker
+              show-alpha
+              v-model="config.series.itemStyle.borderColor"
+              size="mini"
+            ></el-color-picker>
           </el-form-item>
         </el-collapse-item>
       </el-collapse>
@@ -454,16 +634,22 @@ export default {
           value: "api",
         },
       ],
+      positionOption: [
+        {
+          label: "内部",
+          value: "inside",
+        },
+        {
+          label: "外部",
+          value: "outside",
+        },
+      ],
     };
   },
 };
 </script>
 <style lang="scss" scoped>
 .rightSetting {
-  width: 340px;
-  height: 100%;
-  z-index: 10;
-
   ::v-deep {
     .el-form-item__label {
       color: #c1c6c8 !important;

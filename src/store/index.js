@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    background: require("../assets/background/a13.jpg"),
+    background: require("../assets/background/a9.png"),
   },
   mutations: {},
   actions: {},

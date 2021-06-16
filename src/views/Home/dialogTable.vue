@@ -74,7 +74,7 @@ import { deepClone } from "@/utils/index.js";
 export default {
   props: {
     data: {
-      type: Array,
+      type: Array | Object,
     },
   },
   components: { CommonTable },
