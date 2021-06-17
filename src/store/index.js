@@ -5,9 +5,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    background: require("../assets/background/a9.png"),
+    currentBacIndex: 0,
   },
-  mutations: {},
+  mutations: {
+    SET_INDEX(state, index) {
+      state.currentBacIndex = index;
+    },
+  },
   actions: {},
   modules: {},
 });

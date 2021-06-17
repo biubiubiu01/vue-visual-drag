@@ -4,7 +4,6 @@
     :style="{ backgroundImage: 'url(' + background + ')' }"
     ref="preview"
   >
-    <div class="all-container"></div>
     <svg-icon
       icon="return"
       class="returnIcon pointer"
@@ -34,6 +33,8 @@ import {
   radarChart,
   treeChart,
 } from "@/components/Charts";
+import html2canvas from "html2canvas";
+
 export default {
   props: {
     list: {
@@ -73,6 +74,16 @@ export default {
         width: (config.width / this.width) * preWidth + "px",
         height: (config.height / this.height) * preHeight + "px",
       };
+    },
+    exportImg() {
+      const boxDom = this.$refs.preview;
+      html2canvas(boxDom).then((res) => {
+        var dataUrl = res.toDataURL("image/jpeg", 1.0);
+        var a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = `img_${new Date().getTime()}.png`;
+        a.click();
+      });
     },
   },
 };

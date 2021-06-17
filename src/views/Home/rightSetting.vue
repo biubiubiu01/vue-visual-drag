@@ -520,7 +520,7 @@
           </el-form-item>
           <el-form-item
             label="平滑显示："
-            v-if="['bar', 'line'].includes(config.series.type)"
+            v-if="['pie', 'line'].includes(config.series.type)"
           >
             <el-switch v-model="config.series.smooth"></el-switch>
           </el-form-item>

@@ -49,6 +49,16 @@
           @click.native="openDialog"
         />
       </el-tooltip>
+
+      <el-tooltip effect="dark" content="更换背景" placement="bottom-start">
+        <svg-icon
+          icon="background"
+          :size="18"
+          class="svgSpace pointer white"
+          @click.native="backgroundShow = !backgroundShow"
+          :color="backgroundShow ? '#5171fd' : '#fff'"
+        />
+      </el-tooltip>
     </el-row>
     <div class="main-container flex">
       <div class="left flex">
@@ -90,7 +100,9 @@
       </div>
       <div
         class="center flex-sub relative"
-        :style="{ backgroundImage: 'url(' + background + ')' }"
+        :style="{
+          backgroundImage: 'url(' + backgroundList[currentBacIndex] + ')',
+        }"
         ref="cutScreen"
       >
         <draggable
@@ -128,6 +140,18 @@
             ></el-button>
           </vue-drag-resize>
         </draggable>
+
+        <div class="center-background" v-if="backgroundShow">
+          <img
+            v-for="(item, index) in backgroundList"
+            :key="index"
+            class="background-item"
+            :src="item"
+            alt=""
+            @click="changeBacIndex(index)"
+            :class="{ active: currentBacIndex == index }"
+          />
+        </div>
       </div>
       <div class="right">
         <right-setting
@@ -149,10 +173,11 @@
 
     <dialog-preview
       :list="drawingList"
-      :background="background"
+      :background="backgroundList[currentBacIndex]"
       @close="previewShow = false"
       :width="$refs.cutScreen.offsetWidth"
       :height="$refs.cutScreen.offsetHeight"
+      ref="preview"
       v-if="previewShow"
     >
     </dialog-preview>
@@ -164,6 +189,7 @@ import componentList from "@/assets/component/list";
 import draggable from "vuedraggable";
 import vueDragResize from "vue-drag-resize";
 import { deepClone } from "@/utils/index.js";
+
 import {
   barChart,
   lineChart,
@@ -177,7 +203,7 @@ import {
 import rightSetting from "./rightSetting.vue";
 import dialogTable from "./dialogTable";
 import dialogPreview from "./dialogPreview";
-import html2canvas from "html2canvas";
+
 export default {
   name: "Home",
   components: {
@@ -210,11 +236,29 @@ export default {
       dialogTableShow: false,
       //预览显示
       previewShow: false,
+      //背景图选择
+      backgroundShow: false,
+      backgroundList: [
+        require("@/assets/background/a9.png"),
+        require("@/assets/background/a2.png"),
+        require("@/assets/background/a6.jpg"),
+        require("@/assets/background/a7.jpg"),
+        require("@/assets/background/a8.png"),
+        require("@/assets/background/a10.png"),
+        require("@/assets/background/a11.png"),
+        require("@/assets/background/a12.jpg"),
+        require("@/assets/background/a13.jpg"),
+        require("@/assets/background/a14.png"),
+        require("@/assets/background/a15.png"),
+        require("@/assets/background/a16.png"),
+        require("@/assets/background/a17.png"),
+        require("@/assets/background/a19.jpg"),
+      ],
     };
   },
   computed: {
-    background() {
-      return this.$store.state.background;
+    currentBacIndex() {
+      return this.$store.state.currentBacIndex;
     },
     leftList() {
       return componentList.map((item) => item.icon);
@@ -235,6 +279,7 @@ export default {
       const dom = this.$refs.cutScreen;
       const height = dom.offsetHeight - 300;
       const width = dom.offsetWidth - 300;
+      //这里是为了防止拖拽到边界，图形显示不全
       config.left =
         e.originalEvent.offsetX > width ? width : e.originalEvent.offsetX;
       config.top =
@@ -304,6 +349,11 @@ export default {
       });
     },
 
+    //修改背景图片
+    changeBacIndex(index) {
+      this.$store.commit("SET_INDEX", index);
+    },
+
     //打开dialog
     openDialog() {
       if (this.currentDel) {
@@ -331,15 +381,10 @@ export default {
 
     //导出图片
     exportImg() {
-      const boxDom = this.$refs.cutScreen;
-
-      html2canvas(boxDom).then((res) => {
-        var dataUrl = res.toDataURL("image/jpeg", 1.0);
-        var a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = `img_${new Date().getTime()}.png`;
-        a.click();
-      });
+      this.previewShow = true;
+      setTimeout(() => {
+        this.$refs.preview.exportImg();
+      }, 500);
     },
   },
 };
@@ -429,6 +474,29 @@ export default {
       }
       .ghost {
         opacity: 0;
+      }
+      .center-background {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 224px;
+        height: 570px;
+        box-sizing: border-box;
+        padding: 12px;
+        background: rgba(24, 24, 24, 0.8);
+        overflow-y: auto;
+
+        .background-item {
+          margin-bottom: 15px;
+          position: relative;
+          cursor: pointer;
+          width: 100%;
+          height: auto;
+          border-radius: 6px;
+          &.active {
+            border: 1px solid rgba(81, 113, 253, 1);
+          }
+        }
       }
     }
     .right {

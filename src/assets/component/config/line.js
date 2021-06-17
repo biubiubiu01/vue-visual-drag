@@ -114,7 +114,7 @@ export default {
       show: false,
       color: "#f1f1f1",
       fontSize: 12,
-      position: "inside",
+      position: "outside",
     },
     itemStyle: {
       color: "#5171fd",

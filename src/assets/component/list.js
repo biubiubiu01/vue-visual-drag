@@ -94,7 +94,20 @@ export default [
         img: require("../background/a13.jpg"),
       },
       {
-        name: "滚动Table",
+        title: "滚动Table",
+        img: require("../background/a13.jpg"),
+      },
+    ],
+  },
+  {
+    icon: "tool",
+    children: [
+      {
+        title: "日期",
+        img: require("../background/a13.jpg"),
+      },
+      {
+        title: "滚动数字",
         img: require("../background/a13.jpg"),
       },
     ],
