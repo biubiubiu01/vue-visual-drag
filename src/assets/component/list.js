@@ -6,6 +6,11 @@ import gauge from "./config/gauge";
 import word from "./config/word";
 import radar from "./config/radar";
 import tree from "./config/tree";
+import seriesMap from "./config/seriesMap";
+import scatterMap from "./config/scatterMap";
+import date from "./config/date";
+import number from "./config/number";
+import table from "./config/table";
 
 export default [
   {
@@ -65,24 +70,16 @@ export default [
     icon: "map",
     children: [
       {
-        id: "seriesMap",
+        component: "seriesMap",
         title: "分布图",
-        img: require("../background/a13.jpg"),
+        img: require("../component/img/seriesMap.png"),
+        config: seriesMap,
       },
       {
-        id: "scatterMap",
+        component: "scatterMap",
         title: "散点图",
-        img: require("../background/a13.jpg"),
-      },
-      {
-        id: "hotMap",
-        title: "热力图",
-        img: require("../background/a13.jpg"),
-      },
-      {
-        id: "lineMap",
-        title: "航线图",
-        img: require("../background/a13.jpg"),
+        img: require("../component/img/scatterMap.png"),
+        config: scatterMap,
       },
     ],
   },
@@ -90,8 +87,10 @@ export default [
     icon: "table",
     children: [
       {
+        component: "baseTable",
         title: "Table表",
-        img: require("../background/a13.jpg"),
+        img: require("../component/img/date.png"),
+        config: table,
       },
       {
         title: "滚动Table",
@@ -103,12 +102,16 @@ export default [
     icon: "tool",
     children: [
       {
+        component: "DateComponent",
         title: "日期",
-        img: require("../background/a13.jpg"),
+        img: require("../component/img/date.png"),
+        config: date,
       },
       {
+        component: "NumberComponent",
         title: "滚动数字",
-        img: require("../background/a13.jpg"),
+        img: require("../component/img/number.png"),
+        config: number,
       },
     ],
   },

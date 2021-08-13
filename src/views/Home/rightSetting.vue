@@ -40,7 +40,9 @@
         <el-collapse-item
           title="标题"
           name="title"
-          v-if="!['liquid'].includes(config.series.type)"
+          v-if="
+            !['liquid', 'date', 'number', 'table'].includes(config.series.type)
+          "
         >
           <el-form-item label="显示标题：">
             <el-switch v-model="config.title.show"></el-switch>
@@ -94,9 +96,18 @@
           title="图例"
           name="legend"
           v-if="
-            !['liquid', 'gauge', 'word', 'radar', 'tree'].includes(
-              config.series.type
-            )
+            ![
+              'liquid',
+              'gauge',
+              'word',
+              'radar',
+              'tree',
+              'seriesMap',
+              'scatterMap',
+              'date',
+              'table',
+              'number',
+            ].includes(config.series.type)
           "
         >
           <el-form-item label="显示图例：">
@@ -359,9 +370,17 @@
           title="配置项"
           name="series"
           v-if="
-            !['liquid', 'gauge', 'word', 'radar', 'tree'].includes(
-              config.series.type
-            )
+            ![
+              'liquid',
+              'gauge',
+              'word',
+              'radar',
+              'tree',
+              'scatterMap',
+              'date',
+              'table',
+              'number',
+            ].includes(config.series.type)
           "
         >
           <el-form-item
@@ -489,7 +508,13 @@
               >px
             </div>
           </el-form-item>
-          <el-form-item label="label位置：" v-if="config.series.label.show">
+          <el-form-item
+            label="label位置："
+            v-if="
+              config.series.label.show &&
+              !['seriesMap'].includes(config.series.type)
+            "
+          >
             <el-select v-model="config.series.label.position">
               <el-option
                 v-for="item in positionOption"
@@ -554,6 +579,59 @@
             ></el-color-picker>
           </el-form-item>
         </el-collapse-item>
+
+        <el-form-item
+          label="字体样式："
+          v-if="['date', 'number'].includes(config.series.type)"
+        >
+          <div class="flex align-center">
+            <el-color-picker
+              show-alpha
+              v-model="config.series.color"
+              size="mini"
+            ></el-color-picker>
+            <el-input
+              v-model="config.series.fontSize"
+              size="mini"
+              style="margin: 0 8px 0 12px"
+            ></el-input
+            >px
+          </div>
+        </el-form-item>
+        <el-form-item label="结束值：" v-if="config.series.type == 'number'">
+          <el-input v-model="config.series.end" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="小数位：" v-if="config.series.type == 'number'">
+          <el-input v-model="config.series.decimals" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="前缀：" v-if="config.series.type == 'number'">
+          <el-input v-model="config.series.prefix" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="后缀：" v-if="config.series.type == 'number'">
+          <el-input v-model="config.series.suffix" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="动画时长：" v-if="config.series.type == 'number'">
+          <el-input v-model="config.series.duration" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="对齐方式：" v-if="config.series.type == 'table'">
+          <el-select v-model="config.series.align">
+            <el-option label="居左" value="left"></el-option>
+            <el-option label="居中" value="center"></el-option>
+            <el-option label="居右" value="right"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="显示序号：" v-if="config.series.type == 'table'">
+          <el-switch v-model="config.series.indexShow"></el-switch>
+        </el-form-item>
+        <el-form-item label="斑马纹：" v-if="config.series.type == 'table'">
+          <el-switch v-model="config.series.stripe"></el-switch>
+        </el-form-item>
+        <el-form-item label="主题：" v-if="config.series.type == 'table'">
+          <el-radio-group v-model="config.series.mode" size="small">
+            <el-radio-button label="dark">黑色</el-radio-button>
+            <el-radio-button label="white">白色</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
       </el-collapse>
     </el-form>
   </el-scrollbar>

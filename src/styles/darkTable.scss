@@ -1,0 +1,109 @@
+#dark {
+    ::v-deep {
+        .el-table {
+            background: transparent !important;
+            box-sizing: border-box;
+            width: 99.9% !important;
+
+            .el-table__header-wrapper tr th {
+                background-color: #0f1325 !important;
+                color: rgb(255, 255, 255) !important;
+            }
+
+            .el-table__row {
+                background-color: #171c33 !important;
+                color: rgb(255, 255, 255) !important;
+            }
+
+
+
+            td,
+            th.is-leaf {
+                box-sizing: border-box;
+                border-bottom: none !important;
+            }
+
+        }
+        .el-table--striped .el-table__body tr.el-table__row--striped td{
+            background: #0f1325 !important;
+        }
+
+        // .el-table--border,
+        // .el-table--border td {
+        //     border: none !important;
+        //     box-sizing: border-box;
+        // }
+
+        // .el-table--border th {
+        //     border-right: 1px solid #9f9f9f !important;
+        //     box-sizing: border-box;
+        // }
+
+
+
+        // .el-table td {
+        //     overflow: hidden;
+        //     box-sizing: border-box;
+        //     padding-left: 10px !important;
+        // }
+
+
+
+        // .el-table__body {
+        //     width: 100% !important;
+        // }
+
+        // //点击选中后
+        // .el-table__body tr.current-row>td {
+        //     background-color: rgba(0, 14, 47, 0.85) !important;
+        // }
+
+        // .el-table tr {
+        //     background: transparent !important;
+        //     color: #fff !important;
+        //     font-size: 16px !important;
+        // }
+
+        // //去掉table最右边的白线
+        // .el-table--border::after,
+        // .el-table--group::after {
+        //     width: 0 !important;
+        // }
+
+        // .el-table .el-table__body tr:hover>td {
+        //     background-color: rgba(0, 14, 47, 0.85) !important;
+        //     color: #fff !important;
+        // }
+
+        // .el-table--striped .el-table__body tr.el-table__row--striped td {
+        //     background-color: rgba(0, 14, 47, 0.85) !important;
+        // }
+
+        // .el-table--striped .el-table__body tr:hover {
+        //     background-color: rgba(0, 14, 47, 0.85) !important;
+
+        //     &>td {
+        //         background-color: rgba(0, 14, 47, 0.85) !important;
+        //         color: #fff !important;
+        //     }
+        // }
+
+        // .el-table--striped .el-table__body tr.current-row {
+        //     background-color: rgba(0, 14, 47, 0.85) !important;
+        // }
+
+        // //去除th最右边的白块
+        // .el-table td.gutter,
+        // .el-table th.gutter {
+        //     background: transparent !important;
+        //     border: none !important;
+        // }
+
+        // //去掉table下面的白线
+        // .el-table::before,
+        // .el-table__fixed-right::before,
+        // .el-table__fixed::before {
+        //     height: 0 !important;
+        // }
+    }
+}

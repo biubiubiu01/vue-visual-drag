@@ -17,6 +17,7 @@
     "element-ui": "^2.15.2",
     "html2canvas": "^1.0.0-rc.7",
     "vue": "^2.6.11",
+    "vue-count-to": "^1.0.13",
     "vue-drag-resize": "^1.5.4",
     "vue-router": "^3.2.0",
     "vuedraggable": "^2.24.3",

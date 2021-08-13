@@ -32,7 +32,7 @@
         />
       </el-tooltip>
 
-      <el-tooltip effect="dark" content="导出图片" placement="bottom-start">
+      <el-tooltip effect="dark" content="生成图片" placement="bottom-start">
         <svg-icon
           icon="exportImg"
           :size="18"
@@ -122,6 +122,11 @@
             @resizestop="(e) => handleResizeStop(e, item)"
             @clicked="handleComponentClick(item)"
             @dragstop="(e) => handleDragStop(e, item)"
+            @deactivated="
+              () => {
+                showDelete = '';
+              }
+            "
           >
             <component
               :is="item.component"
@@ -135,7 +140,7 @@
               circle
               size="mini"
               class="del-button"
-              v-show="currentDel == item.id"
+              v-show="showDelete == item.id"
               @click="removeComponent(item.id)"
             ></el-button>
           </vue-drag-resize>
@@ -189,7 +194,6 @@ import componentList from "@/assets/component/list";
 import draggable from "vuedraggable";
 import vueDragResize from "vue-drag-resize";
 import { deepClone } from "@/utils/index.js";
-
 import {
   barChart,
   lineChart,
@@ -200,10 +204,14 @@ import {
   radarChart,
   treeChart,
 } from "@/components/Charts";
+import { scatterMap, seriesMap } from "@/components/Map";
 import rightSetting from "./rightSetting.vue";
 import dialogTable from "./dialogTable";
 import dialogPreview from "./dialogPreview";
-
+import DateComponent from "@/components/Date";
+import NumberComponent from "@/components/Number";
+import BaseTable from "@/components/Table/baseTable";
+import ScrollTable from "@/components/Table/scrollTable";
 export default {
   name: "Home",
   components: {
@@ -220,6 +228,12 @@ export default {
     radarChart,
     treeChart,
     dialogPreview,
+    scatterMap,
+    seriesMap,
+    DateComponent,
+    NumberComponent,
+    BaseTable,
+    ScrollTable,
   },
   data() {
     return {
@@ -254,6 +268,7 @@ export default {
         require("@/assets/background/a17.png"),
         require("@/assets/background/a19.jpg"),
       ],
+      showDelete: "",
     };
   },
   computed: {
@@ -302,6 +317,8 @@ export default {
 
     //盒子自适应
     handleResizeStop(e, val) {
+      console.log(e);
+      console.log(val);
       this.$nextTick(() => {
         Object.assign(this.currentConfig, {
           width: e.width,
@@ -309,7 +326,9 @@ export default {
         });
         val.config.width = e.width;
         val.config.height = e.height;
-        this.$refs[val.id][0].myChart.resize();
+        if (!["date", "table"].includes(val.config.series.type)) {
+          this.$refs[val.id][0].myChart.resize();
+        }
       });
     },
 
@@ -332,6 +351,7 @@ export default {
 
     //点击选中当前拖拽的组件
     handleComponentClick(item) {
+      this.showDelete = item.id;
       if (item.id == this.currentDel) return;
       this.currentDel = item.id;
       this.currentConfig = {
@@ -357,7 +377,11 @@ export default {
     //打开dialog
     openDialog() {
       if (this.currentDel) {
-        if (this.currentConfig.series.type == "radar") {
+        if (
+          ["radar", "scatterMap", "date"].includes(
+            this.currentConfig.series.type
+          )
+        ) {
           this.$message.warning("该图形暂不可编辑数据源");
           return;
         }
@@ -376,7 +400,10 @@ export default {
 
     //生成项目
     exportProject() {
-      this.$message.info("功能开发中...");
+      this.$message.info({
+        message: "功能开发中...",
+        duration: 2000,
+      });
     },
 
     //导出图片

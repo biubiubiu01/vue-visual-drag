@@ -33,7 +33,10 @@ import {
   radarChart,
   treeChart,
 } from "@/components/Charts";
+import { scatterMap, seriesMap } from "@/components/Map";
+import DateComponent from "@/components/Date";
 import html2canvas from "html2canvas";
+import NumberComponent from "@/components/Number";
 
 export default {
   props: {
@@ -59,6 +62,10 @@ export default {
     wordChart,
     radarChart,
     treeChart,
+    scatterMap,
+    seriesMap,
+    NumberComponent,
+    DateComponent,
   },
   data() {
     return {};

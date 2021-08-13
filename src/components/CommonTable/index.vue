@@ -12,7 +12,13 @@
       @row-click="(item) => $emit('handleRowClick', item)"
       @selection-change="(item) => $emit('handleSelectionChange', item)"
     >
-      <el-table-column label="序号" type="index" width="50" v-if="indexShow">
+      <el-table-column
+        label="序号"
+        type="index"
+        width="70"
+        align="center"
+        v-if="indexShow"
+      >
         <template scope="scope">
           <span v-if="pageObj">{{
             (pageObj.currentPage - 1) * pageObj.size + scope.$index + 1
@@ -48,7 +54,7 @@
 
         <el-table-column
           :key="item.value"
-          :align="item.align"
+          :align="align"
           :sortable="item.sortable"
           :label="item.label"
           :prop="item.value"
@@ -92,6 +98,9 @@
 import Empty from "../Empty/index";
 export default {
   props: {
+    option: {
+      type: Object,
+    },
     //表头
     tableHead: {
       type: Array,
@@ -120,6 +129,11 @@ export default {
     size: {
       type: String,
       default: "",
+    },
+    //位置
+    align: {
+      type: String,
+      default: "center",
     },
     //是否显示表头
     showHeader: {
@@ -169,14 +183,11 @@ export default {
       return this.height;
     },
   },
+
   methods: {
     fixWidth(val) {
-      let length = 0;
-      if (val.indexOf("(") != -1) {
-        length = val.length * 16 + 10;
-      } else {
-        length = val.length * 20 + 10;
-      }
+      if (!val) return 0;
+      let length = val.length * 16 + 10;
       if (length < 80) {
         length = 80;
       }
@@ -184,8 +195,9 @@ export default {
     },
   },
   watch: {
-    tableData: {
-      handler() {
+    option: {
+      handler(nl) {
+        console.log(nl);
         this.number = Math.random() * 1000;
       },
       deep: true,
