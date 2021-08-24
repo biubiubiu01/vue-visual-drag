@@ -9,11 +9,12 @@ const routes = [
     name: "Home",
     component: () => import("@/views/Home/index"),
   },
+  npm,
 ];
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.BASE_URL,
+  base: "./",
   routes,
 });
 

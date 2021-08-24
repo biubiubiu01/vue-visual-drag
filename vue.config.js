@@ -1,5 +1,5 @@
 const path = require("path");
-const CompressionWebpackPlugin = require("compression-webpack-plugin");
+// const CompressionWebpackPlugin = require("compression-webpack-plugin");
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -92,15 +92,15 @@ module.exports = {
         return args;
       });
       //g-zip开启
-      config.plugin("CompressionWebpackPlugin").use(CompressionWebpackPlugin, [
-        {
-          filename: "[path].gz[query]",
-          algorithm: "gzip",
-          test: /\.js$|\.css/, //匹配文件名
-          threshold: 10240, //对超过10k的数据压缩
-          minRatio: 0.8,
-        },
-      ]);
+      // config.plugin("CompressionWebpackPlugin").use(CompressionWebpackPlugin, [
+      //   {
+      //     filename: "[path].gz[query]",
+      //     algorithm: "gzip",
+      //     test: /\.js$|\.css/, //匹配文件名
+      //     threshold: 10240, //对超过10k的数据压缩
+      //     minRatio: 0.8,
+      //   },
+      // ]);
       //打包大小分析
       if (process.env.npm_config_report) {
         config
