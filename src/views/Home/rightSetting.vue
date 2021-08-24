@@ -632,6 +632,19 @@
             <el-radio-button label="white">白色</el-radio-button>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="表数据源：" v-if="config.series.type == 'table'">
+        </el-form-item>
+        <b-code-editor
+          v-model="config.data"
+          theme="material-darker"
+          v-if="config.series.type == 'table'"
+          ref="editor"
+          @on-change="
+            (val) => {
+              $emit('changeSize', 'data', val);
+            }
+          "
+        />
       </el-collapse>
     </el-form>
   </el-scrollbar>

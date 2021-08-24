@@ -89,12 +89,8 @@ export default [
       {
         component: "baseTable",
         title: "Table表",
-        img: require("../component/img/date.png"),
+        img: require("../component/img/table.png"),
         config: table,
-      },
-      {
-        title: "滚动Table",
-        img: require("../background/a13.jpg"),
       },
     ],
   },

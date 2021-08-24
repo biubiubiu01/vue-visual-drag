@@ -26,9 +26,10 @@ export default {
 
   methods: {
     getOpiton() {
+      let data = JSON.parse(this.config.data);
       this.option = {
-        tableHead: this.config.series.tableHead,
-        tableData: this.config.series.data,
+        tableHead: data.tableHead,
+        tableData: data.tableData,
         indexShow: this.config.series.indexShow,
         align: this.config.series.align,
         stripe: this.config.series.stripe,

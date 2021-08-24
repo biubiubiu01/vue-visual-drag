@@ -211,7 +211,6 @@ import dialogPreview from "./dialogPreview";
 import DateComponent from "@/components/Date";
 import NumberComponent from "@/components/Number";
 import BaseTable from "@/components/Table/baseTable";
-import ScrollTable from "@/components/Table/scrollTable";
 export default {
   name: "Home",
   components: {
@@ -233,7 +232,6 @@ export default {
     DateComponent,
     NumberComponent,
     BaseTable,
-    ScrollTable,
   },
   data() {
     return {
@@ -317,8 +315,6 @@ export default {
 
     //盒子自适应
     handleResizeStop(e, val) {
-      console.log(e);
-      console.log(val);
       this.$nextTick(() => {
         Object.assign(this.currentConfig, {
           width: e.width,
@@ -378,7 +374,7 @@ export default {
     openDialog() {
       if (this.currentDel) {
         if (
-          ["radar", "scatterMap", "date"].includes(
+          ["radar", "scatterMap", "date", "table"].includes(
             this.currentConfig.series.type
           )
         ) {

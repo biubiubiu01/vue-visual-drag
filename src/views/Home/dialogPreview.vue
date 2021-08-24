@@ -37,6 +37,7 @@ import { scatterMap, seriesMap } from "@/components/Map";
 import DateComponent from "@/components/Date";
 import html2canvas from "html2canvas";
 import NumberComponent from "@/components/Number";
+import BaseTable from "@/components/Table/baseTable";
 
 export default {
   props: {
@@ -66,6 +67,7 @@ export default {
     seriesMap,
     NumberComponent,
     DateComponent,
+    BaseTable,
   },
   data() {
     return {};

@@ -11,6 +11,9 @@ import "@/styles/index.scss";
 
 import "@/icons/index";
 
+import CodeEditor from "bin-code-editor";
+Vue.use(CodeEditor);
+
 Vue.config.productionTip = false;
 
 new Vue({
